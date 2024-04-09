@@ -6,23 +6,74 @@
 
 class Terrain:
     def __init__(self,nom,couleur,est_a_vendre,prix) -> None:
-        self.nom = nom
-        self.couleur = couleur
-        self.prix = prix
-        
+        self._nom = nom
+        self._couleur = couleur
+        self._prix = prix
+
+    @property
+    def nom(self):
+        return self._nom
+    @property
+    def couleur(self):
+        return self._couleur
+    @property
+    def prix(self):
+        return self._prix
+
+    @nom.setter
+    def nom(self):
+        print("impossible de changer le nom")
+    @couleur.setter
+    def couleur(self):
+        print("impossible de changer la couleur")
+    @prix.setter
+    def prix(self,new_prix):
+        if new_prix > self._prix:
+            self._prix=new_prix
+        else:
+            raise ValueError("le nouveau prix doit etre superieur a l'ancien")
+
     def __str__(self) -> str:
         return self.nom
 
 class Banque:
-    def __init__(self,montant_cash,list_terrains) -> None:
-        self.montant_cash = montant_cash
+    def __init__(self,montant_cash,list_terrains:list) -> None:
+        self._montant_cash = montant_cash
         self.list_terrains = list_terrains
+        self._montant_parc_immobilier=0
+    
+    @property
+    def montant_cash(self):
+        return self._montant_cash
 
+    @montant_cash.setter
+    def montant_cash(self,new_montant):
+        try:
+            if type(new_montant) ==float:
+                self._montant_cash=new_montant
+        except:
+            print("mauvais type de donnée")
+    
+    def valeur_immo(self):
+        valeur=0
+        for terrain in self.list_terrains:
+            valeur+=terrain.prix
+        return(f"le parx immobilie vaut presentement {valeur}")
 class Joueur:
     def __init__(self,montant_cash,list_terrains) -> None:
-        self.montant_cash = montant_cash
+        self._montant_cash = montant_cash
         self.list_terrains = list_terrains
 
+    @property
+    def montant_cash(self):
+        return self._montant_cash
+
+    @montant_cash.setter
+    def montant_cash(self, new_montant):
+        if type(new_montant)==float:
+            self._montant_cash=new_montant
+        else:
+            raise TypeError("mauvais type")
     def acheter(self,proprietaire,terrain:Terrain): 
         if self.montant_cash >= terrain.prix:
             if (terrain in proprietaire.list_terrains):
@@ -46,6 +97,7 @@ pennsylvanie = Terrain('Avenue Pensylvanie','vert',True,320000)
 promenade = Terrain('Promenade','bleu',True,400000)
 
 banque = Banque(22000000,[kentucky,pennsylvanie,promenade])
+print(banque.valeur_immo())
 
 joueur1 = Joueur(1000000,[])
 joueur2 = Joueur(1000000,[])

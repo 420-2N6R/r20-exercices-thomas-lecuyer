@@ -1,13 +1,28 @@
 import datetime
-
-class Employe:
+from abc import ABC,abstractmethod
+class Employe(ABC):
     def __init__(self,id_employe, prenom, nom, role, salaire):
         self.id_employe = id_employe
         self.prenom = prenom
         self.nom = nom
         self.role = role
-        self.salaire = salaire
+        self._salaire = salaire
         self.courriel = prenom + '.' + nom +'@gmail.com'
+    
+    @property
+    def salaire(self):
+        return self._salaire
+
+    @salaire.setter
+    def salaire(self, new_salaire):        
+        if new_salaire > self._salaire:
+            self._salaire=new_salaire
+        else:
+            raise ValueError("le nouveau salaire doit etre superieure a l'ancien")
+    
+    @abstractmethod
+    def logger(self):
+        pass
         
     def __str__(self):
         info = f'\t ID: {self.id_employe}, \n\t Nom: {self.nom}, \n\t Prénom: {self.prenom}, \n\t Role: {self.role}'
@@ -21,7 +36,7 @@ class Programmeur(Employe):
         else:
             self.liste_fonctions = []
     
-    def coder(self,fonction):
+    def logger(self,fonction):
         self.liste_fonctions.append(fonction)
         
     def __str__(self):
@@ -37,7 +52,7 @@ class Designer(Employe):
         else:
             self.liste_artefacts = []
     
-    def dessiner(self,artefact):
+    def logger(self,artefact):
         self.liste_artefacts.append(artefact)
         
     def __str__(self):
@@ -53,7 +68,7 @@ class Tech_Reseau(Employe):
         else:
             self.liste_interventions = []
     
-    def intervenir(self,intervention):
+    def logger(self,intervention):
         self.liste_interventions.append(intervention)
         
     def __str__(self):
@@ -135,15 +150,15 @@ nouvelle_equipe.ajouter_employe(top_designer,datetime.date.today())
 nouvelle_equipe.ajouter_employe(architecte_principal,datetime.date.today())
 
 # Ajout d'une fonction pour le gestionnaire
-gestionnaire.coder("Entrevues pour remplir l'équipe")
+gestionnaire.logger("Entrevues pour remplir l'équipe")
 print("\nInfos sur le gestionnaire:")
 print(gestionnaire)
 print("\nInfos sur le designer")
-top_designer.dessiner("logo")
+top_designer.logger("logo")
 print(top_designer)
 # Ajout de 2 interventions pour l'architecte principal
-architecte_principal.intervenir("Mise en place de 3 serveurs")
-architecte_principal.intervenir("Installation du vlan pour l'équipe de développement")
+architecte_principal.logger("Mise en place de 3 serveurs")
+architecte_principal.logger("Installation du vlan pour l'équipe de développement")
 print("\nInfos sur l'architecte principal")
 print(architecte_principal)
 

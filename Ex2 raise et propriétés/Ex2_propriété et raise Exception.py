@@ -18,23 +18,27 @@ from math import pi
 
 class Sphere:
     def __init__(self, pRayon) -> None:
-        self._rayon = pRayon
+        if type(pRayon) != int and type(pRayon) != float:
+            raise TypeError("mauvais type de donnée")
+        elif pRayon<=0:
+            raise ValueError("la valeur n'est pas valide")
+        else: self._rayon = pRayon
     
     @property
     def rayon(self) :
-        pass
+        return self._rayon
 
     @property
     def circonference(self):
-        pass # la circonférence d'une sphère est égal à " 2 * pi * rayon "
+        return 2*self._rayon*pi # la circonférence d'une sphère est égal à " 2 * pi * rayon "
 
     @property
     def volume(self):
-        pass # le volume d'une sphère est égale à " 4/3 * pi * (rayon ** 3) "
+        return (4/3)*pi*(self._rayon**3) # le volume d'une sphère est égale à " 4/3 * pi * (rayon ** 3) "
 
     @property
     def aire(self):
-        pass
+        return pi*self._rayon**2
 
 
 if __name__ == "__main__" :
@@ -42,3 +46,8 @@ if __name__ == "__main__" :
 
     #Testez votre code, voir l'énoncé
 
+new_cercle=Sphere(20)
+
+print(new_cercle.circonference)
+print(new_cercle.volume)
+print(new_cercle.aire)
